@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
-    @Query(value = "SELECT * FROM Paciente p where p.nombre = : valor || p.apellido = :valor  ", nativeQuery = true)
+    @Query(value = "SELECT * FROM Paciente p where p.nombre = : valor || p.apellido = : valor  ", nativeQuery = true)
     Optional<Paciente> buscarPaciente(@Param("valor") String valor);
 
   /*  @Query("SELECT o FROM Paciente")

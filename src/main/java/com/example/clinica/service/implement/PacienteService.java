@@ -66,12 +66,8 @@ public class PacienteService implements IPacienteService<PacienteDto> {
 
       Optional<Paciente> paciente = repository.buscarPaciente(valor);
 
-        PacienteDto pacienteDto = null;
+        PacienteDto  pacienteDto = (mapper.getModelMapper().map(paciente.get(), PacienteDto.class));
 
-       if (paciente.isPresent()) {
-
-           pacienteDto = (mapper.getModelMapper().map(paciente.get(), PacienteDto.class));
-       }
 
         return pacienteDto;
     }

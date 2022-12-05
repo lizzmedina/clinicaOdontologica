@@ -53,7 +53,7 @@ public class OdontologoController {
     }
     //diseño de apis
 
-    @GetMapping("/obtener/{id}")
+    @GetMapping("/obtenerx/{id}")
     public OdontologoDto obtenerOdontologoPorId(@PathVariable int id){
         return odontologoService.obtenerPorId(id);
     }

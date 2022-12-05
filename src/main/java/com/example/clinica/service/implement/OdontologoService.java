@@ -5,7 +5,6 @@ import com.example.clinica.model.dto.OdontologoDto;
 import com.example.clinica.persistence.entities.Odontologo;
 import com.example.clinica.persistence.repository.OdontologoRepository;
 import com.example.clinica.service.IOdontologoService;
-import com.example.clinica.service.IPacienteService;
 import com.example.clinica.service.ServiceException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,11 @@ public class OdontologoService implements IOdontologoService<OdontologoDto> {
     private ObjectMapper oMapper;
 
     @Autowired
-    private OdontologoRepository repository;
+    private final OdontologoRepository repository;
+
+    public OdontologoService(OdontologoRepository repository) {
+        this.repository = repository;
+    }
 
     private Odontologo toEntity (OdontologoDto dto){
         Odontologo odontologo = mapper.getModelMapper().map(dto, Odontologo.class);

@@ -34,12 +34,12 @@ public class PacienteController {
         return ResponseEntity.ok(resultado);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/porId/{id}", method = RequestMethod.GET)
     public PacienteDto obtenerPacientePorId(@PathVariable int id){
         return service.obtenerPorId(id);
     }
 
-  @RequestMapping(value = "/{valor}", method = RequestMethod.GET)
+  @RequestMapping(value = "/apellidoNombre/{valor}", method = RequestMethod.GET)
     public  PacienteDto obtenerPacientePorNombreOApellido(@PathVariable String valor){
         return service.obtenerPorNombreOApellido(valor);
     }
