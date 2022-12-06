@@ -2,6 +2,8 @@ package com.example.clinica.persistence.entities;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "turnos")
@@ -15,7 +17,6 @@ public class Turno {
 
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name= "paciente_id", nullable = false)
-    //private Set<Paciente> pacientes = new HashSet<>();
     private Paciente paciente;
 
     @ManyToOne( fetch = FetchType.LAZY)

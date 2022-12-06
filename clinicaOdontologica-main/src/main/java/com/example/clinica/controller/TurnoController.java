@@ -1,6 +1,7 @@
 package com.example.clinica.controller;
 
 import com.example.clinica.model.dto.AgendarTurnoDto;
+import com.example.clinica.model.dto.OdontologoDto;
 import com.example.clinica.model.dto.TurnoDto;
 import com.example.clinica.service.ITurnoService;
 import com.example.clinica.service.implement.TurnoServiceImpl;
@@ -35,8 +36,8 @@ public class TurnoController {
 
     @GetMapping("/listarTodos")
     public ResponseEntity<List<TurnoDto>> listarTodosLosTurnos(){
-
-        return ResponseEntity.ok(turnoService.verTodosLosTurnos());
+        List<TurnoDto> resultado = turnoService.verTodosLosTurnos();
+        return ResponseEntity.ok(resultado);
 
     }
    @GetMapping("obtener/{porFecha}")

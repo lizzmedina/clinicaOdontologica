@@ -11,10 +11,7 @@ import com.example.clinica.persistence.repository.ITurnoRepository;
 import com.example.clinica.service.ITurnoService;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -68,28 +65,26 @@ public class TurnoServiceImpl implements ITurnoService<TurnoDto> {
 
     @Override
     public List<TurnoDto> verTodosLosTurnos() {
-        List<TurnoDto> turnos = new ArrayList<>();
+        List<TurnoDto> resultado = new ArrayList<>();
+        List<Turno> turno = repository.findAll();
 
-        for(Turno turno : this.repository.findAll()) {
-            turnos.add(mapper.getModelMapper().map(turno, TurnoDto.class));
-        }
+         turno.forEach(e -> resultado.add((mapper.getModelMapper().map(e, TurnoDto.class))));
 
-        return turnos;
+
+        return resultado;
     }
+
 
     @Override
     public TurnoDto verTurnoPorId(int id) {
 
-        Optional<Turno> turno = this.repository.findById(id);
+        Optional<Turno> t = repository.findById(id);
+        TurnoDto turnoDto =null;
+        if (t.isPresent()) {
 
-        TurnoDto turnoDto = null;
-
-        if (turno.isPresent()) {
-            turnoDto =  mapper.getModelMapper().map(turno.get(), TurnoDto.class);
-
+            turnoDto = mapper.getModelMapper().map(t, TurnoDto.class);
         }
         return  turnoDto;
-
     }
 
     @Override

@@ -10,13 +10,13 @@ public class TurnoDto implements Serializable {
 
     private int id;
     private LocalDate fecha;
-    private Paciente paciente;
-    private Odontologo odontologo;
+    private PacienteDto paciente;
+    private OdontologoDto odontologo;
 
     public TurnoDto() {
     }
 
-    public TurnoDto(LocalDate fecha, Paciente paciente, Odontologo odontologo) {
+    public TurnoDto(LocalDate fecha, PacienteDto paciente, OdontologoDto odontologo) {
         this.fecha = fecha;
         this.paciente = paciente;
         this.odontologo = odontologo;
@@ -38,19 +38,19 @@ public class TurnoDto implements Serializable {
         this.fecha = fecha;
     }
 
-    public Paciente getPaciente() {
+    public PacienteDto getPaciente() {
         return paciente;
     }
 
-    public void setPaciente(Paciente paciente_id) {
-        this.paciente = paciente_id;
+    public void setPaciente(PacienteDto paciente) {
+        this.paciente = paciente;
     }
 
-    public Odontologo getOdontologo() {
+    public OdontologoDto getOdontologo() {
         return odontologo;
     }
 
-    public void setOdontologo(Odontologo odontologo_id) {
-        this.odontologo = odontologo_id;
+    public void setOdontologo(OdontologoDto odontologo) {
+        this.odontologo = odontologo;
     }
 }
