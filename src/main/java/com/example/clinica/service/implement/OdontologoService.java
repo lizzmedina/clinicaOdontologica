@@ -2,7 +2,9 @@ package com.example.clinica.service.implement;
 
 import com.example.clinica.config.MapperConfig;
 import com.example.clinica.model.dto.OdontologoDto;
+import com.example.clinica.model.dto.PacienteDto;
 import com.example.clinica.persistence.entities.Odontologo;
+import com.example.clinica.persistence.entities.Paciente;
 import com.example.clinica.persistence.repository.OdontologoRepository;
 import com.example.clinica.service.IOdontologoService;
 import com.example.clinica.service.ServiceException;
@@ -79,9 +81,16 @@ public class OdontologoService implements IOdontologoService<OdontologoDto> {
     }
 
     @Override
-    public OdontologoDto obtenerPorMatricula(String matricula) {
-        return null;
+    public List<OdontologoDto> obtenerPorMatricula(String matricula) {
+        List<OdontologoDto> resultado = new ArrayList<>();
+
+        List<Odontologo> entidades = repository.buscarOdontologoPorMatricula(matricula);
+
+        entidades.forEach(e -> resultado.add(mapper.getModelMapper().map(e, OdontologoDto.class)));
+
+        return resultado;
     }
+
 
     @Override
     public OdontologoDto actualizar (OdontologoDto odontologoDto) throws ServiceException {

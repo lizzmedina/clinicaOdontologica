@@ -1,5 +1,7 @@
 package com.example.clinica.service;
 
+import com.example.clinica.model.dto.OdontologoDto;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,7 +10,8 @@ public interface IPacienteService<D extends Serializable> {
 
     List<D> encontrarTodos();
     D obtenerPorId(int id);
-    D obtenerPorNombreOApellido(String nombre);
+    List<D> obtenerPorNombre(String nombre);
+    List<D> obtenerPorApellido(String nombre);
 
     D actualizar(D dto) throws ServiceException;
 

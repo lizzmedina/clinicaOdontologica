@@ -8,7 +8,7 @@ public interface IOdontologoService <D extends Serializable> {
 
     List<D> encontrarTodos();
     D obtenerPorId(int id);
-    D obtenerPorMatricula(String matricula);
+    List<D> obtenerPorMatricula(String matricula);
 
     D actualizar(D dto) throws ServiceException;
 

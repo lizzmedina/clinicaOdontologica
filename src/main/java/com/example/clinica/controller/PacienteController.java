@@ -39,9 +39,13 @@ public class PacienteController {
         return service.obtenerPorId(id);
     }
 
-  @RequestMapping(value = "/apellidoNombre/{valor}", method = RequestMethod.GET)
-    public  PacienteDto obtenerPacientePorNombreOApellido(@PathVariable String valor){
-        return service.obtenerPorNombreOApellido(valor);
+  @RequestMapping(value = "/nombre/{nombre}", method = RequestMethod.GET)
+    public  List<PacienteDto> obtenerPacientePorNombre(@PathVariable String nombre){
+        return service.obtenerPorNombre(nombre);
+    }
+    @RequestMapping(value = "/apellido/{apellido}", method = RequestMethod.GET)
+    public  List<PacienteDto> listarPacientesPorApellido(@PathVariable String apellido){
+        return service.obtenerPorApellido(apellido);
     }
 
     @DeleteMapping(value = "/borrar/{id}")

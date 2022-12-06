@@ -62,17 +62,27 @@ public class PacienteService implements IPacienteService<PacienteDto> {
     }
 
     @Override
-    public PacienteDto obtenerPorNombreOApellido(String valor) {
+    public List<PacienteDto> obtenerPorNombre(String nombre) {
 
-      Optional<Paciente> paciente = repository.buscarPaciente(valor);
+        List<PacienteDto> resultado = new ArrayList<>();
 
-        PacienteDto  pacienteDto = (mapper.getModelMapper().map(paciente.get(), PacienteDto.class));
+        List<Paciente> entidades = repository.buscarPacientePorNombre(nombre);
 
+        entidades.forEach(e -> resultado.add(mapper.getModelMapper().map(e, PacienteDto.class)));
 
-        return pacienteDto;
+        return resultado;
     }
 
+    @Override
+    public List<PacienteDto> obtenerPorApellido(String apellido) {
+        List<PacienteDto> resultado = new ArrayList<>();
 
+        List<Paciente> entidades = repository.buscarPacientePorApellido(apellido);
+
+        entidades.forEach(e -> resultado.add(mapper.getModelMapper().map(e, PacienteDto.class)));
+
+        return resultado;
+    }
 
     @Override
     public PacienteDto actualizar (PacienteDto pacienteDto) throws ServiceException {

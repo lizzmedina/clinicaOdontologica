@@ -59,7 +59,7 @@ public class OdontologoController {
     }
 
     @GetMapping("obtener/{matricula}")
-    public OdontologoDto obtenerPOdontologoPorMatricula(@PathVariable String matricula){
+    public List<OdontologoDto> obtenerPOdontologoPorMatricula(@PathVariable String matricula){
         return odontologoService.obtenerPorMatricula(matricula);
     }
 
