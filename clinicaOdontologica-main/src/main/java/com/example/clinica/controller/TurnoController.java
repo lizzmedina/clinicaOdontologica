@@ -6,6 +6,7 @@ import com.example.clinica.model.dto.TurnoDto;
 import com.example.clinica.service.ITurnoService;
 import com.example.clinica.service.implement.TurnoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,9 +42,7 @@ public class TurnoController {
 
     }
    @GetMapping("obtenerFecha/{fecha}")
-   public ResponseEntity<List<TurnoDto>> listarTurnosPorFecha(LocalDate fecha){
+   public ResponseEntity<List<TurnoDto>> listarTurnosPorFecha(@PathVariable @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate fecha){
         return ResponseEntity.ok(turnoService.verTurnosPorFecha(fecha));
    }
-
-
 }
