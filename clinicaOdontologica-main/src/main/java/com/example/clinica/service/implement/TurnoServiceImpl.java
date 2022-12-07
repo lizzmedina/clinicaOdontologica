@@ -79,18 +79,27 @@ public class TurnoServiceImpl implements ITurnoService<TurnoDto> {
     public TurnoDto verTurnoPorId(int id) {
 
         Optional<Turno> t = repository.findById(id);
+
         TurnoDto turnoDto =null;
         if (t.isPresent()) {
 
-            turnoDto = mapper.getModelMapper().map(t, TurnoDto.class);
+            turnoDto = mapper.getModelMapper().map(t.get(), TurnoDto.class);
         }
         return  turnoDto;
     }
 
+
     @Override
     public List<TurnoDto> verTurnosPorFecha(LocalDate fecha) {
-        return null;
+        List<TurnoDto> resultado = new ArrayList<>();
+        List<Turno> etidades = repository.buscarTurnosPorFecha(fecha);
+        etidades.forEach(e -> resultado.add(mapper.getModelMapper().map(e, TurnoDto.class)));
+        return resultado;
     }
+
+
+
+
 
 
     // PRIVATE METHODS

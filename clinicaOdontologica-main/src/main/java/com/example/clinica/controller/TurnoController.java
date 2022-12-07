@@ -40,7 +40,7 @@ public class TurnoController {
         return ResponseEntity.ok(resultado);
 
     }
-   @GetMapping("obtener/{porFecha}")
+   @GetMapping("obtenerFecha/{fecha}")
    public ResponseEntity<List<TurnoDto>> listarTurnosPorFecha(LocalDate fecha){
         return ResponseEntity.ok(turnoService.verTurnosPorFecha(fecha));
    }
