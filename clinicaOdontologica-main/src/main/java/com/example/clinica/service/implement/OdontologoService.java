@@ -1,15 +1,15 @@
 package com.example.clinica.service.implement;
 
+import ch.qos.logback.classic.Logger;
 import com.example.clinica.config.MapperConfig;
+import com.example.clinica.exceptions.ResourceNotFoundException;
 import com.example.clinica.model.dto.OdontologoDto;
-import com.example.clinica.model.dto.PacienteDto;
 import com.example.clinica.persistence.entities.Odontologo;
-import com.example.clinica.persistence.entities.Paciente;
 import com.example.clinica.persistence.repository.OdontologoRepository;
 import com.example.clinica.service.IOdontologoService;
-import com.example.clinica.service.ServiceException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,19 +38,19 @@ public class OdontologoService implements IOdontologoService<OdontologoDto> {
         return odontologo;
 
     }
-   /* private void guardar (OdontologoDto odontologoDto){
-        Odontologo odontologo = mapper.getModelMapper().map(odontologoDto, Odontologo.class);
-        repository.save(odontologo);
-    }*/
+
     @Override
-    public OdontologoDto crear(OdontologoDto dto) {
+    public OdontologoDto crear(OdontologoDto dto) throws ResourceNotFoundException {
 
         Odontologo odontologo = repository.save(toEntity(dto));
 
-        if (odontologo != null) {
+        if (!dto.getMatricula().isBlank()) {
             dto = mapper.getModelMapper().map(odontologo, OdontologoDto.class);
-        }
 
+        }
+        else {
+            throw new ResourceNotFoundException("No existe o no fue posible crear el odontologo, por favor revise los datos ingresados e intente nuevamente");
+        }
         return dto;
     }
 
@@ -66,7 +66,7 @@ public class OdontologoService implements IOdontologoService<OdontologoDto> {
     }
 
     @Override
-    public OdontologoDto obtenerPorId(int id) {
+    public OdontologoDto obtenerPorId(int id) throws ResourceNotFoundException {
 
         Optional<Odontologo> odontologo = this.repository.findById(id);
 
@@ -76,12 +76,15 @@ public class OdontologoService implements IOdontologoService<OdontologoDto> {
             odontologoDto =  mapper.getModelMapper().map(odontologo.get(), OdontologoDto.class);
 
         }
+        else {
+            throw new ResourceNotFoundException("No existe o no fue posible encontrar el odontologo con el id indicado.");
+        }
         return  odontologoDto;
 
     }
 
-        @Override
-    public OdontologoDto obtenerPorMatricula(String matricula) {
+    @Override
+    public OdontologoDto obtenerPorMatricula(String matricula) throws ResourceNotFoundException {
         OdontologoDto resultado = null;
 
         Odontologo entidad = repository.buscarOdontologoPorMatricula(matricula);
@@ -89,13 +92,16 @@ public class OdontologoService implements IOdontologoService<OdontologoDto> {
         if(entidad !=null) {
             resultado = mapper.getModelMapper().map(entidad, OdontologoDto.class);
         }
+        else {
+            throw new ResourceNotFoundException("No existe o no fue posible encontrar el odontologo con la matricula indicada.");
+        }
 
         return resultado;
     }
 
 
     @Override
-    public OdontologoDto actualizar (OdontologoDto odontologoDto) throws ServiceException {
+    public OdontologoDto actualizar (OdontologoDto odontologoDto) throws ResourceNotFoundException {
 
         Optional<Odontologo> odontologo = repository.findById(odontologoDto.getId());
 
@@ -113,7 +119,7 @@ public class OdontologoService implements IOdontologoService<OdontologoDto> {
         repository.save(odontologo.get());
 
         }else {
-            throw new ServiceException("No existe o no fue posible encontrar el odontologo ingresado");
+            throw new ResourceNotFoundException("No existe o no fue posible actualizar el odontologo ingresado");
         }
 
         return mapper.getModelMapper().map(odontologo, OdontologoDto.class);
@@ -121,12 +127,14 @@ public class OdontologoService implements IOdontologoService<OdontologoDto> {
 
 
     @Override
-    public String borrar(int id) {
+    public String borrar(int id) throws ResourceNotFoundException {
         if (repository.findById(id).isPresent()) {
             repository.deleteById(id);
             return "Odontologo eliminado correctamente.";
         }
-        return "Error! El id de odontologo digitado no existe";
+        else {
+            throw new ResourceNotFoundException("No existe o no fue posible crear el odontologo, por favor revise los datos ingresados e intente nuevamente");
+        }
     }
 
 }

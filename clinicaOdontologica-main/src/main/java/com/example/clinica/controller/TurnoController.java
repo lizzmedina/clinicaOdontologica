@@ -1,5 +1,6 @@
 package com.example.clinica.controller;
 
+import com.example.clinica.exceptions.ResourceNotFoundException;
 import com.example.clinica.model.dto.AgendarTurnoDto;
 import com.example.clinica.model.dto.OdontologoDto;
 import com.example.clinica.model.dto.TurnoDto;
@@ -20,18 +21,15 @@ public class TurnoController {
     public TurnoServiceImpl turnoService;
 
     @PostMapping(value = "/agregar")
-    public ResponseEntity<TurnoDto> crearTurno(@RequestBody AgendarTurnoDto agendarTurnoDto) throws Exception {
+    public ResponseEntity<TurnoDto> crearTurno(@RequestBody AgendarTurnoDto agendarTurnoDto) throws ResourceNotFoundException {
         ResponseEntity<TurnoDto> respuesta = null;
-        try {
-            respuesta = ResponseEntity.ok(turnoService.crearTurno(agendarTurnoDto));
-        }catch (Exception e){
-            throw new Exception(e);
-        }
+        respuesta = ResponseEntity.ok(turnoService.crearTurno(agendarTurnoDto));
+
         return respuesta;
     }
 
     @GetMapping("/obtener/{id}")
-    public TurnoDto obtenerTurnoPorId(@PathVariable int id){
+    public TurnoDto obtenerTurnoPorId(@PathVariable int id) throws ResourceNotFoundException {
         return turnoService.verTurnoPorId(id);
     }
 

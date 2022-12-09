@@ -1,5 +1,6 @@
 package com.example.clinica.service;
 
+import com.example.clinica.exceptions.ResourceNotFoundException;
 import com.example.clinica.model.dto.AgendarTurnoDto;
 import com.example.clinica.model.dto.OdontologoDto;
 import com.example.clinica.model.dto.PacienteDto;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface ITurnoService<D extends Serializable> {
 
     TurnoDto crearTurno(AgendarTurnoDto agendarTurnoDto) throws Exception;
-    TurnoDto verTurnoPorId(int id);
+    TurnoDto verTurnoPorId(int id) throws ResourceNotFoundException;
     List<TurnoDto> verTodosLosTurnos();
 
     List<TurnoDto> verTurnosPorFecha(LocalDate fecha);

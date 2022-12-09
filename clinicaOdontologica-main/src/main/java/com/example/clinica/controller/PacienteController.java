@@ -1,7 +1,7 @@
 package com.example.clinica.controller;
 
+import com.example.clinica.exceptions.ResourceNotFoundException;
 import com.example.clinica.model.dto.PacienteDto;
-import com.example.clinica.service.ServiceException;
 import com.example.clinica.service.implement.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class PacienteController {
     private PacienteService service;
 
     @PostMapping
-    public ResponseEntity<PacienteDto> crearPaciente(@RequestBody PacienteDto dto)  {
+    public ResponseEntity<PacienteDto> crearPaciente(@RequestBody PacienteDto dto) throws ResourceNotFoundException {
         ResponseEntity<PacienteDto> respuesta;
         respuesta = ResponseEntity.ok(service.crear(dto));
 
@@ -35,7 +35,7 @@ public class PacienteController {
     }
 
     @RequestMapping(value = "/porId/{id}", method = RequestMethod.GET)
-    public PacienteDto obtenerPacientePorId(@PathVariable int id){
+    public PacienteDto obtenerPacientePorId(@PathVariable int id) throws ResourceNotFoundException {
         return service.obtenerPorId(id);
     }
 
@@ -49,13 +49,13 @@ public class PacienteController {
     }
 
     @DeleteMapping(value = "/borrar/{id}")
-    public ResponseEntity<?> borrarPaciente(@PathVariable int id){
+    public ResponseEntity<?> borrarPaciente(@PathVariable int id) throws ResourceNotFoundException {
        service.borrar(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PutMapping(value = "/actualizar")
-    public ResponseEntity<?> actualizarPaciente(@RequestBody PacienteDto dto) throws ServiceException {
+    public ResponseEntity<?> actualizarPaciente(@RequestBody PacienteDto dto) throws ResourceNotFoundException {
         service.actualizar(dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }

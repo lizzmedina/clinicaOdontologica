@@ -1,13 +1,11 @@
 package com.example.clinica.controller;
 
+import com.example.clinica.exceptions.ResourceNotFoundException;
 import com.example.clinica.model.dto.OdontologoDto;
-import com.example.clinica.model.dto.PacienteDto;
 import com.example.clinica.service.implement.OdontologoService;
-import com.example.clinica.service.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +20,7 @@ public class OdontologoController {
 
 
     @PostMapping
-    public ResponseEntity<OdontologoDto> crearOdontologo(@RequestBody OdontologoDto odont)  {
+    public ResponseEntity<OdontologoDto> crearOdontologo(@RequestBody OdontologoDto odont) throws ResourceNotFoundException {
         ResponseEntity<OdontologoDto> respuesta = null;
         respuesta = ResponseEntity.ok(odontologoService.crear(odont));
 
@@ -36,27 +34,26 @@ public class OdontologoController {
         return ResponseEntity.ok(odontologoService.encontrarTodos());
 
     }
-    //diseño de apis
 
     @GetMapping("/obtenerx/{id}")
-    public OdontologoDto obtenerOdontologoPorId(@PathVariable int id){
+    public OdontologoDto obtenerOdontologoPorId(@PathVariable int id) throws ResourceNotFoundException {
         return odontologoService.obtenerPorId(id);
     }
 
 
     @GetMapping("obtener/{matricula}")
-    public OdontologoDto obtenerPOdontologoPorMatricula(@PathVariable String matricula){
+    public OdontologoDto obtenerOdontologoPorMatricula(@PathVariable String matricula) throws ResourceNotFoundException {
         return odontologoService.obtenerPorMatricula(matricula);
     }
 
     @DeleteMapping(value = "/borrar/{id}")
-    public ResponseEntity<?> borrarOdontologo(@PathVariable int id){
+    public ResponseEntity<?> borrarOdontologo(@PathVariable int id) throws ResourceNotFoundException {
         odontologoService.borrar(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PutMapping(value = "/actualizar")
-    public ResponseEntity<?> actualizarOdontologo(@RequestBody OdontologoDto dto) throws ServiceException {
+    public ResponseEntity<?> actualizarOdontologo(@RequestBody OdontologoDto dto) throws ResourceNotFoundException {
         odontologoService.actualizar(dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }

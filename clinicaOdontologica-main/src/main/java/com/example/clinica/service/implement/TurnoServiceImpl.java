@@ -1,5 +1,7 @@
 package com.example.clinica.service.implement;
+
 import com.example.clinica.config.MapperConfig;
+import com.example.clinica.exceptions.ResourceNotFoundException;
 import com.example.clinica.model.dto.AgendarTurnoDto;
 import com.example.clinica.model.dto.OdontologoDto;
 import com.example.clinica.model.dto.PacienteDto;
@@ -9,10 +11,8 @@ import com.example.clinica.persistence.entities.Paciente;
 import com.example.clinica.persistence.entities.Turno;
 import com.example.clinica.persistence.repository.ITurnoRepository;
 import com.example.clinica.service.ITurnoService;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,27 +38,29 @@ public class TurnoServiceImpl implements ITurnoService<TurnoDto> {
     // IMPLEMENTATION
 
    @Override
-   public TurnoDto crearTurno(AgendarTurnoDto agendarTurnoDto) throws Exception {
+   public TurnoDto crearTurno(AgendarTurnoDto agendarTurnoDto) throws ResourceNotFoundException {
        Turno turno = new Turno();
        TurnoDto turnoDto;
        if (!agendarTurnoDto.getFecha().isBefore(LocalDate.now())) {
-           try {
-               PacienteDto pacienteDto = pacienteService.obtenerPorId(agendarTurnoDto.getIdPaciente());
-               turno.setPaciente(mapper.getModelMapper().map(pacienteDto, Paciente.class));
-           } catch (ServiceException e) {
-               throw new Exception(e.getMessage());
+
+           PacienteDto pacienteDto = pacienteService.obtenerPorId(agendarTurnoDto.getIdPaciente());
+           if (pacienteDto ==null){
+               throw new ResourceNotFoundException("No se pudo encontrar el paciente con el id indicado.");
            }
-           try {
-               OdontologoDto odontologoDto = odontologoService.obtenerPorId(agendarTurnoDto.getIdOdontologo());
-               turno.setOdontologo(mapper.getModelMapper().map(odontologoDto, Odontologo.class));
-           } catch (ServiceException e) {
-               throw new Exception(e.getMessage());
+
+
+           OdontologoDto odontologoDto = odontologoService.obtenerPorId(agendarTurnoDto.getIdOdontologo());
+           if (odontologoDto ==null){
+               throw new ResourceNotFoundException("No se pudo encontrar el odontologo con el id indicado.");
            }
+
+           turno.setPaciente(mapper.getModelMapper().map(pacienteDto, Paciente.class));
+           turno.setOdontologo(mapper.getModelMapper().map(odontologoDto, Odontologo.class));
            turno.setFecha(agendarTurnoDto.getFecha());
            Turno turnoGuardado = guardarTurno(turno);
            turnoDto = mapper.getModelMapper().map(turnoGuardado, TurnoDto.class);
        } else
-           throw new ServiceException("La fecha ingresada es anterior a la fecha actual, " +
+           throw new ResourceNotFoundException("La fecha ingresada es anterior a la fecha actual, " +
                    "intente con una fecha posterior.");
        return turnoDto;
    }
@@ -76,7 +78,7 @@ public class TurnoServiceImpl implements ITurnoService<TurnoDto> {
 
 
     @Override
-    public TurnoDto verTurnoPorId(int id) {
+    public TurnoDto verTurnoPorId(int id) throws ResourceNotFoundException {
 
         Optional<Turno> t = repository.findById(id);
 
@@ -85,6 +87,9 @@ public class TurnoServiceImpl implements ITurnoService<TurnoDto> {
 
             turnoDto = mapper.getModelMapper().map(t.get(), TurnoDto.class);
         }
+        else
+            throw new ResourceNotFoundException("ERROR! No existe el id para ningun turno registrado. ");
+
         return  turnoDto;
     }
 
@@ -96,10 +101,6 @@ public class TurnoServiceImpl implements ITurnoService<TurnoDto> {
         etidades.forEach(e -> resultado.add(mapper.getModelMapper().map(e, TurnoDto.class)));
         return resultado;
     }
-
-
-
-
 
 
     // PRIVATE METHODS

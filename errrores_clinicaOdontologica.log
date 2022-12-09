@@ -1,0 +1,5 @@
+[2022-12-0812: 45:22] [ ERROR] [GlobalExceptionHandler:26] Failed to convert value of type 'java.lang.String' to required type 'int'; nested exception is java.lang.NumberFormatException: For input string: "b"
+[2022-12-0812: 53:19] [ ERROR] [GlobalExceptionHandler:26] No value present
+[2022-12-0812: 57:25] [ ERROR] [GlobalExceptionHandler:26] Request method 'DELETE' not supported
+[2022-12-0812: 57:58] [ ERROR] [GlobalExceptionHandler:18] La fecha ingresada es anterior a la fecha actual, intente con una fecha posterior.
+[2022-12-0812: 58:26] [ ERROR] [GlobalExceptionHandler:18] No se pudo encontrar el paciente con el id indicado.

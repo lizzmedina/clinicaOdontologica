@@ -1,14 +1,16 @@
 package com.example.clinica.service.implement;
 
 import com.example.clinica.config.MapperConfig;
+import com.example.clinica.exceptions.ResourceNotFoundException;
 import com.example.clinica.model.dto.PacienteDto;
 import com.example.clinica.persistence.entities.Paciente;
 import com.example.clinica.persistence.repository.PacienteRepository;
 import com.example.clinica.service.IPacienteService;
-import com.example.clinica.service.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.*;
 
 @Service
@@ -24,12 +26,14 @@ public class PacienteService implements IPacienteService<PacienteDto> {
         return paciente;
     }
     @Override
-    public PacienteDto crear(PacienteDto dto) {
+    public PacienteDto crear(PacienteDto dto) throws ResourceNotFoundException {
 
         Paciente paciente = repository.save(toEntity(dto));
 
-        if (paciente != null) {
+        if (!dto.getDctoIdentidad().isBlank()) {
             dto = mapper.getModelMapper().map(paciente, PacienteDto.class);
+        }else {
+            throw new ResourceNotFoundException("No existe o no fue posible crear el paciente, por favor revise los datos ingresados e intente nuevamente");
         }
 
         return dto;
@@ -48,7 +52,7 @@ public class PacienteService implements IPacienteService<PacienteDto> {
     }
 
     @Override
-    public PacienteDto obtenerPorId(int id) {
+    public PacienteDto obtenerPorId(int id) throws ResourceNotFoundException {
 
         Optional<Paciente> paciente = this.repository.findById(id);
 
@@ -57,6 +61,8 @@ public class PacienteService implements IPacienteService<PacienteDto> {
         if (paciente.isPresent()) {
             pacienteDto =  mapper.getModelMapper().map(paciente.get(), PacienteDto.class);
 
+        }else {
+            throw new ResourceNotFoundException("No existe o no fue posible encontrar el paciente con el id ingresado");
         }
         return  pacienteDto;
     }
@@ -85,7 +91,7 @@ public class PacienteService implements IPacienteService<PacienteDto> {
     }
 
     @Override
-    public PacienteDto actualizar (PacienteDto pacienteDto) throws ServiceException {
+    public PacienteDto actualizar (PacienteDto pacienteDto) throws ResourceNotFoundException {
 
         Optional<Paciente> paciente = repository.findById(pacienteDto.getId());
 
@@ -106,7 +112,7 @@ public class PacienteService implements IPacienteService<PacienteDto> {
             repository.save(paciente.get());
 
         }else {
-            throw new ServiceException("No existe o no fue posible encontrar el paciente ingresado");
+            throw new ResourceNotFoundException("No existe o no fue posible encontrar el paciente ingresado");
         }
 
         return mapper.getModelMapper().map(paciente, PacienteDto.class);
@@ -114,11 +120,13 @@ public class PacienteService implements IPacienteService<PacienteDto> {
 
 
     @Override
-    public String borrar(int id) {
+    public String borrar(int id) throws ResourceNotFoundException {
         if (repository.findById(id).isPresent()) {
             repository.deleteById(id);
             return "Paciente eliminado correctamente.";
         }
-        return "Error! El id del paciente digitado no existe";
+        else {
+            throw new ResourceNotFoundException("No existe o no fue posible encontrar el paciente con el id ingresado");
+        }
     }
 }
